@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title></title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0
+    }
+
+    li {
+      list-style: none
+    }
+
+    .demo {
+      width: 500px;
+      margin: 0 auto;
+    }
+
+    .demo ol {
+      width: 500px;
+    }
+
+    .demo ol li {
+      color: green;
+      width: 100px;
+      float: left;
+      line-height: 30px;
+      text-align: center;
+      font-size: 16px;
+      background-color: #eee;
+    }
+
+    .demo ol li.cur {
+      background: #aaa;
+    }
+
+    .demo ul li {
+      display: none;
+      width: 500px;
+      height: 500px;
+      background-color: #ffcccc;
+    }
+  </style>
+  <script src="http://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+  <script src="../dist/index.js"></script>
+</head>
+
+<body>
+  <div class="demo">
+    <ol>
+      <li>一</li>
+      <li>二</li>
+      <li>三</li>
+      <li>四</li>
+      <li>五</li>
+    </ol>
+    <ul>
+      <li>1</li>
+      <li>2</li>
+      <li>3</li>
+      <li>4</li>
+      <li>5</li>
+    </ul>
+  </div>
+  <script>
+    (function () {
+      var App = Vir({
+        events: {
+          'click->ol > li': 'handler'
+        },
+        watch: {
+          index: function (result) {
+            var old = result.old
+            var index = result.value
+            this.$$('ol > li').eq(index).addClass('cur')
+            this.$$('ul > li').eq(index).show()
+            if (old === void 0) {
+              return
+            }
+            this.$$('ol > li').eq(old).removeClass('cur')
+            this.$$('ul > li').eq(old).hide()
+          }
+        },
+        methods: {
+          handler: function (e) {
+            var index = $(e.currentTarget).index()
+            this.set('index', index)
+          }
+        }
+      })
+
+
+      new App({
+        el: ".demo",
+        init: function () {
+          this.set('index', 0)
+        }
+      })
+    })()
+  </script>
+</body>
+
+</html>

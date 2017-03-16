@@ -1,0 +1,19 @@
+{
+  "name": "vir",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "repository": "git@github.com:cjg125/vir.git",
+  "author": "caojungang <caojungang@sogou-inc.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "rollup -c -w"
+  },
+  "devDependencies": {
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-transform-object-assign": "^6.22.0",
+    "babel-preset-latest": "^6.24.0",
+    "rollup": "^0.41.5",
+    "rollup-plugin-babel": "^2.7.1",
+    "rollup-watch": "^3.2.2"
+  }
+}
