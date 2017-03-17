@@ -1,13 +1,11 @@
 export default function (Vir) {
-  Vir.prototype.set = function (name, value, options) {
+  Vir.prototype.set = function (name, value, options = {}) {
     if (typeof name == 'object') {
       let i
       for (i in name) {
         this.set(i, name[i], value)
       }
     } else {
-
-      options || (options = {})
 
       let old = this.get(name)
 

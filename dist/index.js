@@ -1,5 +1,5 @@
 /*!
- * Vir.js v0.1.0
+ * Vir.js v0.1.1
  * (c) 2016-2017 cjg
  * Released under the MIT License.
  */
@@ -193,15 +193,15 @@ var initEvents = function (Vir) {
 };
 
 var initSetter = function (Vir) {
-  Vir.prototype.set = function (name, value, options) {
+  Vir.prototype.set = function (name, value) {
+    var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
     if ((typeof name === 'undefined' ? 'undefined' : _typeof(name)) == 'object') {
       var i = void 0;
       for (i in name) {
         this.set(i, name[i], value);
       }
     } else {
-
-      options || (options = {});
 
       var old = this.get(name);
 
