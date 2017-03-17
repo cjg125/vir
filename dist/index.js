@@ -272,3 +272,4 @@ var index = function (defaultOptions) {
 return index;
 
 })));
+//# sourceMappingURL=index.js.map
