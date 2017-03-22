@@ -127,6 +127,9 @@ var app = new App(options)
 
       app.set('index', 1)
       ```
+  * beforeInit: Function
+
+    > 实例初始化完成前执行
 
   * init: Function
 
@@ -161,7 +164,7 @@ var app = new App(options)
       ```
   * set( name, value )
 
-    > 设置 **data** 值 （ 会触发 change 事件 ）
+    > 设置 **data** 值 （ 会触发 'change' 事件 ）
 
       ```js
       var App = Vir()
@@ -171,16 +174,28 @@ var app = new App(options)
         }
       })
 
+      app.on('index', function(result){
+        /*
+          result = {
+            old: 0,
+            value: 1,
+            type: 'index'
+          }
+        */
+        console.log(result)
+      })
+
       app.get('index') // -> 0
-      app.set('index', 1)
+      app.set('index', 1) // emit index
       app.get('index') // -> 1
+
       ```
 
   * $$( selector, [cache] )
 
-    > 在 **$el ( jquery 对象 )** 下查找对应 dom
+    > 在 **$el ( jquery 对象 )** 下查找对应 dom 可以设置 cache 为 false 清除默认缓存
 
-  * on(change: name, callback)
+  * on(name, callback)
 
     > 自定义 **set** 方法触发事件
 
@@ -191,8 +206,13 @@ var app = new App(options)
           index: 0
         }
       })
-      app.on('change:index', function(result){
+      app.on('index', function(result){
         // result.value -> 1
       })
       app.set('index', 1)
       ```
+  * once(name, callback)
+
+  * off(name, callback)
+
+  * emit(name, arguments, context)

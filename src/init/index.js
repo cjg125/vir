@@ -1,7 +1,7 @@
-import bindEvents from './bindEvents'
+import extend from './extend'
 import initMixin from './mixin'
 import initWatch from './watch'
-import extend from './extend'
+import initBindEvents from './bindEvents'
 
 let uid = 0
 
@@ -14,6 +14,7 @@ export default function (Vir) {
       events,
       methods,
       watch,
+      beforeInit,
       init,
       inited
     } = extend(defaultOptions, options)
@@ -24,9 +25,10 @@ export default function (Vir) {
     this._events = {}
     this._cache = {}
 
+    beforeInit.call(this)
     initMixin.call(this, methods)
     initWatch.call(this, watch)
-    bindEvents.call(this, events)
+    initBindEvents.call(this, events)
     init.call(this)
     inited.call(this)
   }

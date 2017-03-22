@@ -5,6 +5,7 @@ export default function (defaultOptions = {}, options = {}) {
     events: {},
     methods: {},
     watch: {},
+    beforeInit() {},
     init() {},
     inited() {}
   }, defaultOptions, options)

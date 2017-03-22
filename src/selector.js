@@ -3,7 +3,7 @@ export default function (Vir) {
 
     let _cache = this._cache
 
-    let _selector = this._uid + '_' + this.$el.selector + ' ' + selector
+    let _selector = selector.replace(/\s/g, '')
 
     if (cache === false) {
       _cache[_selector] = null

@@ -19,7 +19,7 @@ export default function (Vir) {
         return
       }
 
-      this.emit('change:' + name, {
+      this.emit(name, {
         old: old,
         value: value,
         type: name

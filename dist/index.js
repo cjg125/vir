@@ -1,6 +1,6 @@
 /*!
- * Vir.js v0.1.1
- * (c) 2016-2017 cjg
+ * Vir.js v0.2.0
+ * (c) 2017 cjg
  * Released under the MIT License.
  */
 (function (global, factory) {
@@ -9,34 +9,20 @@
 	(global.Vir = factory());
 }(this, (function () { 'use strict';
 
-var bindEvents = function (events) {
-  var _this = this;
+var extend = function () {
+  var defaultOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-  for (var e in events) {
-    var arr = e.split('->');
-    var handlers = events[e].split(' ');
-    var i = 0;
-    var len = handlers.length;
-
-    var _loop = function _loop() {
-      var handler = _this[handlers[i]];
-      if (handler) {
-        if (arr[1]) {
-          _this.$el.on(arr[0], arr[1], function (event) {
-            return handler.call(_this, event);
-          });
-        } else {
-          _this.$el.on(arr[0], function (event) {
-            return handler.call(_this, event);
-          });
-        }
-      }
-    };
-
-    for (; i < len; i++) {
-      _loop();
-    }
-  }
+  return $.extend(true, {
+    tagName: 'div',
+    data: {},
+    events: {},
+    methods: {},
+    watch: {},
+    beforeInit: function beforeInit() {},
+    init: function init() {},
+    inited: function inited() {}
+  }, defaultOptions, options);
 };
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
@@ -85,23 +71,38 @@ var initMixin = function (methods) {
 
 var initWatch = function (watch) {
   for (var name in watch) {
-    this.on('change:' + name, watch[name]);
+    this.on(name, watch[name]);
   }
 };
 
-var extend = function () {
-  var defaultOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+var initBindEvents = function (events) {
+  var _this = this;
 
-  return $.extend(true, {
-    tagName: 'div',
-    data: {},
-    events: {},
-    methods: {},
-    watch: {},
-    init: function init() {},
-    inited: function inited() {}
-  }, defaultOptions, options);
+  for (var e in events) {
+    var arr = e.split('->');
+    var handlers = events[e].split(' ');
+    var i = 0;
+    var len = handlers.length;
+
+    var _loop = function _loop() {
+      var handler = _this[handlers[i]];
+      if (handler) {
+        if (arr[1]) {
+          _this.$el.on(arr[0], arr[1], function (event) {
+            return handler.call(_this, event);
+          });
+        } else {
+          _this.$el.on(arr[0], function (event) {
+            return handler.call(_this, event);
+          });
+        }
+      }
+    };
+
+    for (; i < len; i++) {
+      _loop();
+    }
+  }
 };
 
 var uid = 0;
@@ -115,6 +116,7 @@ var init = function (Vir) {
         events = _extend.events,
         methods = _extend.methods,
         watch = _extend.watch,
+        beforeInit = _extend.beforeInit,
         init = _extend.init,
         inited = _extend.inited;
 
@@ -124,9 +126,10 @@ var init = function (Vir) {
     this._events = {};
     this._cache = {};
 
+    beforeInit.call(this);
     initMixin.call(this, methods);
     initWatch.call(this, watch);
-    bindEvents.call(this, events);
+    initBindEvents.call(this, events);
     init.call(this);
     inited.call(this);
   };
@@ -215,7 +218,7 @@ var initSetter = function (Vir) {
         return;
       }
 
-      this.emit('change:' + name, {
+      this.emit(name, {
         old: old,
         value: value,
         type: name
@@ -235,7 +238,7 @@ var initSelector = function (Vir) {
 
     var _cache = this._cache;
 
-    var _selector = this._uid + '_' + this.$el.selector + ' ' + selector;
+    var _selector = selector.replace(/\s/g, '');
 
     if (cache === false) {
       _cache[_selector] = null;
