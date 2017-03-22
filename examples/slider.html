@@ -116,7 +116,7 @@
           'mouseleave': 'loop',
           'click->.prev': 'prev',
           'click->.next': 'next',
-          'click->ol > li': 'toggle'
+          'mouseenter->ol > li': 'toggle'
         },
         watch: {
           index: [function (result) {
@@ -124,7 +124,7 @@
             var index = result.value
             var len = this._len
             var w = this.w
-            this.$$('ul').animate({
+            this.$$('ul').stop(true, true).animate({
               left: index * w * -1
             }, this.duration || 400, function () {
               if (self._stop) {
