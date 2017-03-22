@@ -1,5 +1,5 @@
 /*!
- * Vir.js v0.2.0
+ * Vir.js v0.3.0
  * (c) 2017 cjg
  * Released under the MIT License.
  */
@@ -69,39 +69,56 @@ var initMixin = function (methods) {
   _extends(this, methods);
 };
 
-var initWatch = function (watch) {
+function handler(watch) {
   for (var name in watch) {
-    this.on(name, watch[name]);
+    if (typeof watch[name] === 'function') {
+      this.on(name, watch[name]);
+    } else {
+      var watchs = watch[name];
+      var i = 0;
+      var len = watchs.length;
+      var options = {};
+      for (; i < len; i++) {
+        options[name] = watchs[i];
+        handler.call(this, options);
+      }
+    }
   }
-};
+}
 
 var initBindEvents = function (events) {
-  var _this = this;
 
-  for (var e in events) {
-    var arr = e.split('->');
-    var handlers = events[e].split(' ');
-    var i = 0;
-    var len = handlers.length;
+  function bindEvent() {
+    var _this = this;
 
-    var _loop = function _loop() {
-      var handler = _this[handlers[i]];
-      if (handler) {
-        if (arr[1]) {
-          _this.$el.on(arr[0], arr[1], function (event) {
-            return handler.call(_this, event);
-          });
-        } else {
-          _this.$el.on(arr[0], function (event) {
-            return handler.call(_this, event);
-          });
-        }
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    var handler = args.pop();
+    if (typeof handler === 'function') {
+      handler = [handler];
+    } else {
+      handler = handler.split(' ');
+    }
+
+    var _loop = function _loop(i, len) {
+      var callback = handler[i];
+      if (typeof callback !== 'function') {
+        callback = _this[callback];
       }
+      _this.$el.on.apply(_this.$el, args.concat(function (event) {
+        return callback.call(_this, event);
+      }));
     };
 
-    for (; i < len; i++) {
-      _loop();
+    for (var i = 0, len = handler.length; i < len; i++) {
+      _loop(i, len);
     }
+  }
+
+  for (var type in events) {
+    bindEvent.apply(this, type.split('->').concat(events[type]));
   }
 };
 
@@ -128,7 +145,7 @@ var init = function (Vir) {
 
     beforeInit.call(this);
     initMixin.call(this, methods);
-    initWatch.call(this, watch);
+    handler.call(this, watch);
     initBindEvents.call(this, events);
     init.call(this);
     inited.call(this);

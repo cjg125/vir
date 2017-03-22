@@ -1,13 +1,13 @@
 {
   "name": "vir",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "main": "dist/index.js",
   "repository": "git@github.com:cjg125/vir.git",
   "author": "caojungang <caojungang@sogou-inc.com>",
   "license": "MIT",
   "scripts": {
     "dev": "rollup -c -w",
-    "rel": "rollup -c --environment NODE_ENV:production"
+    "rel": "rollup -c && rollup -c --environment NODE_ENV:production"
   },
   "devDependencies": {
     "babel-plugin-external-helpers": "^6.22.0",

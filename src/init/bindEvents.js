@@ -1,18 +1,22 @@
 export default function (events) {
-  for (let e in events) {
-    let arr = e.split('->')
-    let handlers = events[e].split(' ')
-    let i = 0
-    let len = handlers.length
-    for (; i < len; i++) {
-      let handler = this[handlers[i]]
-      if (handler) {
-        if (arr[1]) {
-          this.$el.on(arr[0], arr[1], (event) => handler.call(this, event))
-        } else {
-          this.$el.on(arr[0], (event) => handler.call(this, event))
-        }
-      }
+
+  function bindEvent(...args) {
+    let handler = args.pop()
+    if (typeof handler === 'function') {
+      handler = [handler]
+    } else {
+      handler = handler.split(' ')
     }
+    for (let i = 0, len = handler.length; i < len; i++) {
+      let callback = handler[i]
+      if (typeof callback !== 'function') {
+        callback = this[callback]
+      }
+      this.$el.on.apply(this.$el, args.concat((event) => callback.call(this, event)))
+    }
+  }
+
+  for (let type in events) {
+    bindEvent.apply(this, type.split('->').concat(events[type]))
   }
 }

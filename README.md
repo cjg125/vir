@@ -95,6 +95,39 @@ var app = new App(options)
 
     > 没传递 el 参数,将用 tagName 创建一个dom上下文
 
+  * events: Object
+
+    > 绑定dom监听事件
+
+      ```html
+      <div class="demo">
+        <a href="#">click</a>
+        <input type="text">
+        <button class="btn">button</button>
+      <div>
+      ```
+
+      ```js
+      var App = Vir()
+      var app = new App({
+        el: '.demo',
+        events: {
+          "click", "handle",
+          "click->a", "handle",
+          "click->.btn", "handle",
+          "keydown->input", function(event){
+            console.log(event)
+          }
+        },
+        methods: {
+          handle: function(event){
+            console.log(event)
+          }
+        }
+      })
+
+      ```
+
   * data: Object
 
     > 可以用 set/get **方法** 设置/获取 **值**
