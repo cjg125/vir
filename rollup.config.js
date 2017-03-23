@@ -9,20 +9,13 @@ const banner =
 import babel from 'rollup-plugin-babel'
 import uglify from 'rollup-plugin-uglify'
 
-
-
 let dest = 'dist/index.js'
-
 let plugins = [
-  babel({
-    runtimeHelpers: true
-  })
+  babel()
 ]
 
 if (process.env.NODE_ENV === 'production') {
-
   dest = 'dist/index.min.js'
-
   plugins.push(uglify({
     compress: {
       screw_ie8: false
@@ -34,7 +27,6 @@ if (process.env.NODE_ENV === 'production') {
       screw_ie8: false
     }
   }))
-
 }
 
 export default {
