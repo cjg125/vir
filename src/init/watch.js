@@ -1,6 +1,10 @@
+import {
+  isFunction
+} from '../lib/typeof'
+
 export default function handler(watch) {
   for (let name in watch) {
-    if (typeof watch[name] === 'function') {
+    if (isFunction(watch[name])) {
       this.on(name, watch[name])
     } else {
       let watchs = watch[name]

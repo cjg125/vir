@@ -1,8 +1,11 @@
+import {
+  isObject
+} from './lib/typeof'
+
 export default function (Vir) {
   Vir.prototype.set = function (name, value, options = {}) {
-    if (typeof name == 'object') {
-      let i
-      for (i in name) {
+    if (isObject(name)) {
+      for (let i in name) {
         this.set(i, name[i], value)
       }
     } else {

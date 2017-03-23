@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title></title>
   <script src="https://unpkg.com/jquery"></script>
-  <script src="../dist/index.min.js"></script>
+  <script src="../dist/index.js"></script>
   <style>
     * {
       margin: 0;
@@ -183,6 +183,7 @@
           this.await = 3000
           this.duration = 600
           this.loop()
+          console.log(this)
         }
       })
     })()

@@ -25,32 +25,6 @@ var extend = function () {
   }, defaultOptions, options);
 };
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
-  return typeof obj;
-} : function (obj) {
-  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 var _extends = Object.assign || function (target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i];
@@ -69,9 +43,25 @@ var initMixin = function (methods) {
   _extends(this, methods);
 };
 
+var toString = Object.prototype.toString;
+
+function type(val) {
+  return toString.call(val);
+}
+
+
+
+function isObject(val) {
+  return type(val) === '[object Object]';
+}
+
+function isFunction(val) {
+  return type(val) === '[object Function]';
+}
+
 function handler(watch) {
   for (var name in watch) {
-    if (typeof watch[name] === 'function') {
+    if (isFunction(watch[name])) {
       this.on(name, watch[name]);
     } else {
       var watchs = watch[name];
@@ -96,7 +86,7 @@ var initBindEvents = function (events) {
     }
 
     var handler = args.pop();
-    if (typeof handler === 'function') {
+    if (isFunction(handler)) {
       handler = [handler];
     } else {
       handler = handler.split(' ');
@@ -104,7 +94,7 @@ var initBindEvents = function (events) {
 
     var _loop = function _loop(i, len) {
       var callback = handler[i];
-      if (typeof callback !== 'function') {
+      if (!isFunction(callback)) {
         callback = _this[callback];
       }
       _this.$el.on.apply(_this.$el, args.concat(function (event) {
@@ -153,18 +143,26 @@ var init = function (Vir) {
 };
 
 var initEvents = function (Vir) {
-  Vir.prototype.getEventListeners = function (type) {
+  // Vir.prototype.getEventListeners = function (type) {
+  //   if (type === void 0) {
+  //     return this._events
+  //   }
+  //   let t = type.toLowerCase()
+  //   return this._events[t] || (this._events[t] = [])
+  // }
+
+  function all(type) {
     if (type === void 0) {
       return this._events;
     }
     var t = type.toLowerCase();
     return this._events[t] || (this._events[t] = []);
-  };
+  }
 
   Vir.prototype.on = function (type, handler) {
     var _this = this;
 
-    this.getEventListeners(type).push(handler);
+    all.call(this, type).push(handler);
     return function () {
       _this.off(type, handler);
     };
@@ -176,7 +174,7 @@ var initEvents = function (Vir) {
   };
 
   Vir.prototype.off = function (type, handler) {
-    var queue = this.getEventListeners(type);
+    var queue = all.call(this, type);
     if (handler == void 0) {
       queue.length = 0;
       return;
@@ -194,9 +192,9 @@ var initEvents = function (Vir) {
   };
 
   Vir.prototype.emit = function (type, args, ctx) {
-    var queue = this.getEventListeners(type);
+    var queue = all.call(this, type);
     if (type != '*') {
-      queue = queue.concat(this.getEventListeners('*'));
+      queue = queue.concat(all.call(this, '*'));
     }
     var i = 0;
     var len = queue.length;
@@ -216,9 +214,8 @@ var initSetter = function (Vir) {
   Vir.prototype.set = function (name, value) {
     var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
-    if ((typeof name === 'undefined' ? 'undefined' : _typeof(name)) == 'object') {
-      var i = void 0;
-      for (i in name) {
+    if (isObject(name)) {
+      for (var i in name) {
         this.set(i, name[i], value);
       }
     } else {
