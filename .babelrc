@@ -1,4 +1,9 @@
 {
+  "env": {
+    "test": {
+      "presets": ["latest"]
+    }
+  },
   "presets": [
     [
       "latest", {
