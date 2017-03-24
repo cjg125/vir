@@ -3,7 +3,7 @@
   "version": "0.3.0",
   "main": "dist/index.js",
   "repository": "git@github.com:cjg125/vir.git",
-  "author": "caojungang <caojungang@sogou-inc.com>",
+  "author": "cjg <125989100@qq.com>",
   "license": "MIT",
   "scripts": {
     "dev": "rollup -c -w",
