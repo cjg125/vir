@@ -1,11 +1,4 @@
 export default function (Vir) {
-  // Vir.prototype.getEventListeners = function (type) {
-  //   if (type === void 0) {
-  //     return this._events
-  //   }
-  //   let t = type.toLowerCase()
-  //   return this._events[t] || (this._events[t] = [])
-  // }
 
   function all(type) {
     if (type === void 0) {
@@ -15,7 +8,10 @@ export default function (Vir) {
     return this._events[t] || (this._events[t] = [])
   }
 
+  // Vir.prototype.getEventListeners = all
+
   Vir.prototype.on = function (type, handler) {
+    // todo 过滤重复绑定问题
     all.call(this, type).push(handler)
     return () => {
       this.off(type, handler)

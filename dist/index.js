@@ -143,13 +143,6 @@ var init = function (Vir) {
 };
 
 var initEvents = function (Vir) {
-  // Vir.prototype.getEventListeners = function (type) {
-  //   if (type === void 0) {
-  //     return this._events
-  //   }
-  //   let t = type.toLowerCase()
-  //   return this._events[t] || (this._events[t] = [])
-  // }
 
   function all(type) {
     if (type === void 0) {
@@ -159,9 +152,12 @@ var initEvents = function (Vir) {
     return this._events[t] || (this._events[t] = []);
   }
 
+  // Vir.prototype.getEventListeners = all
+
   Vir.prototype.on = function (type, handler) {
     var _this = this;
 
+    // todo 过滤重复绑定问题
     all.call(this, type).push(handler);
     return function () {
       _this.off(type, handler);
