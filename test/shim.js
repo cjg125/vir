@@ -3,7 +3,7 @@ import test from 'ava'
 import {
   forEach,
   indexOf
-} from '../src/lib/es/array'
+} from '../src/lib/shim/array'
 
 const data = ['a', 'b', 'c', 'd', 'e', 'f']
 

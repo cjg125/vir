@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title></title>
-  <script src="https://unpkg.com/jquery"></script>
+  <script src="https://unpkg.com/jquery@1.12.4"></script>
   <script src="../dist/index.js"></script>
   <style>
     * {
@@ -48,11 +48,12 @@
 
     .slider .prev,
     .slider .next {
+      position: absolute;
       width: 30px;
       height: 60px;
-      background: rgba(0, 0, 0, .5);
-      position: absolute;
+      background:red;
       top: 150px;
+      z-index: 10;
     }
 
     .slider .next {
@@ -63,6 +64,7 @@
       position: absolute;
       right: 10px;
       bottom: 10px;
+      z-index: 10;
     }
 
     .slider ol li {
@@ -183,7 +185,6 @@
           this.await = 3000
           this.duration = 600
           this.loop()
-          console.log(this)
         }
       })
     })()

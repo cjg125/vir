@@ -152,7 +152,7 @@ var initEvents = function (Vir) {
     return this._events[t] || (this._events[t] = []);
   }
 
-  // Vir.prototype.getEventListeners = all
+  Vir.prototype.getEventListeners = all;
 
   Vir.prototype.on = function (type, handler) {
     var _this = this;
@@ -175,12 +175,8 @@ var initEvents = function (Vir) {
       queue.length = 0;
       return;
     }
-    var i = queue.length;
-    for (; i--;) {
-      if (queue[i] == handler) {
-        break;
-      }
-    }
+
+    var i = queue.indexOf(handler);
 
     if (~i) {
       queue.splice(i, 1);
@@ -188,21 +184,19 @@ var initEvents = function (Vir) {
   };
 
   Vir.prototype.emit = function (type, args, ctx) {
+    var _this2 = this;
+
     var queue = all.call(this, type);
     if (type != '*') {
       queue = queue.concat(all.call(this, '*'));
     }
-    var i = 0;
-    var len = queue.length;
-    for (; i < len; i++) {
-      var handler = queue[i];
+
+    queue.forEach(function (handler) {
       handler.call(ctx, args);
       if (handler._once) {
-        i--;
-        len--;
-        this.off(type, handler);
+        _this2.off(type, handler);
       }
-    }
+    });
   };
 };
 
@@ -263,6 +257,40 @@ var initSelector = function (Vir) {
     return $el;
   };
 };
+
+function forEach$1(callback) {
+  for (var i = 0, len = this.length; i < len; i++) {
+    callback(this[i], i, this);
+  }
+}
+
+function indexOf$1(value) {
+  var i = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
+  var len = this.length;
+  i = Math.max(i >= 0 ? i : len - Math.abs(i), 0);
+  for (; i < len; i++) {
+    if (this[i] === value) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+function forEach$$1() {
+  if (!Array.prototype.forEach) {
+    Array.prototype.forEach = forEach$1;
+  }
+}
+
+function indexOf$$1() {
+  if (!Array.prototype.indexOf) {
+    Array.prototype.indexOf = indexOf$1;
+  }
+}
+
+forEach$$1();
+indexOf$$1();
 
 var index = function (defaultOptions) {
   function Vir(options) {

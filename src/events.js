@@ -8,7 +8,7 @@ export default function (Vir) {
     return this._events[t] || (this._events[t] = [])
   }
 
-  // Vir.prototype.getEventListeners = all
+  Vir.prototype.getEventListeners = all
 
   Vir.prototype.on = function (type, handler) {
     // todo 过滤重复绑定问题
@@ -29,12 +29,8 @@ export default function (Vir) {
       queue.length = 0
       return
     }
-    let i = queue.length
-    for (; i--;) {
-      if (queue[i] == handler) {
-        break
-      }
-    }
+
+    let i = queue.indexOf(handler)
 
     if (~i) {
       queue.splice(i, 1)
@@ -47,16 +43,13 @@ export default function (Vir) {
     if (type != '*') {
       queue = queue.concat(all.call(this, '*'))
     }
-    let i = 0
-    let len = queue.length
-    for (; i < len; i++) {
-      let handler = queue[i]
+
+    queue.forEach((handler) => {
       handler.call(ctx, args)
       if (handler._once) {
-        i--
-        len--
         this.off(type, handler)
       }
-    }
+    })
+
   }
 }
