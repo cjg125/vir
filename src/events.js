@@ -1,6 +1,11 @@
+import {
+  forEach,
+  indexOf
+} from './lib/array'
+
 export default function (Vir) {
 
-  function all(type) {
+  Vir.prototype.getEventListeners = function (type) {
     if (type === void 0) {
       return this._events
     }
@@ -8,11 +13,14 @@ export default function (Vir) {
     return this._events[t] || (this._events[t] = [])
   }
 
-  Vir.prototype.getEventListeners = all
+  Vir.prototype.$watch = function (type, handler, once = false) {
+    handler._once = once
+    return this.on(type, handler)
+  }
 
   Vir.prototype.on = function (type, handler) {
     // todo 过滤重复绑定问题
-    all.call(this, type).push(handler)
+    this.getEventListeners(type).push(handler)
     return () => {
       this.off(type, handler)
     }
@@ -24,13 +32,13 @@ export default function (Vir) {
   }
 
   Vir.prototype.off = function (type, handler) {
-    let queue = all.call(this, type)
+    let queue = this.getEventListeners(type)
     if (handler == void 0) {
       queue.length = 0
       return
     }
 
-    let i = queue.indexOf(handler)
+    let i = indexOf(queue, handler)
 
     if (~i) {
       queue.splice(i, 1)
@@ -39,12 +47,12 @@ export default function (Vir) {
   }
 
   Vir.prototype.emit = function (type, args, ctx) {
-    let queue = all.call(this, type)
+    let queue = this.getEventListeners(type)
     if (type != '*') {
-      queue = queue.concat(all.call(this, '*'))
+      queue = queue.concat(this.getEventListeners('*'))
     }
 
-    queue.forEach((handler) => {
+    forEach(queue, (handler) => {
       handler.call(ctx, args)
       if (handler._once) {
         this.off(type, handler)

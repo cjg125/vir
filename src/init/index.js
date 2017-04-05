@@ -1,3 +1,7 @@
+import $ from 'jquery'
+import {
+  create
+} from '../lib/objeat'
 import extend from './extend'
 import initMixin from './mixin'
 import initWatch from './watch'
@@ -22,8 +26,8 @@ export default function (Vir) {
     this._uid = ++uid
     this.$el = el ? $(el) : $('<' + tagName + '>')
     this.data = data
-    this._events = {}
-    this._cache = {}
+    this._events = create(null)
+    this._cache = create(null)
 
     beforeInit.call(this)
     initMixin.call(this, methods)

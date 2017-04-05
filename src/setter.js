@@ -9,9 +9,7 @@ export default function (Vir) {
         this.set(i, name[i], value)
       }
     } else {
-
       let old = this.get(name)
-
       this.data[name] = value
 
       if (!options.force && old === value) {

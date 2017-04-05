@@ -1,9 +1,9 @@
 import test from 'ava'
-import initVir from './helpers/initVir'
+import Vir from '../dist/index'
 
 test('订阅事件 once', async t => {
-  const Vir = await initVir()
-  const app = new(Vir())
+  const App = Vir()
+  const app = new App
   t.plan(4)
   app.once('a', () => {
     t.pass()
@@ -24,8 +24,8 @@ test('订阅事件 once', async t => {
 })
 
 test('订阅事件 once', async t => {
-  const Vir = await initVir()
-  const app = new(Vir())
+  const App = Vir()
+  const app = new App
   app.on('a', () => {
     t.pass()
   })

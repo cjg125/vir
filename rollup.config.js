@@ -35,6 +35,10 @@ export default {
   format: 'umd',
   moduleName: 'Vir',
   sourceMap: true,
+  external: ['jquery'],
+  globals: {
+    jquery: 'jQuery'
+  },
   plugins,
   banner
 }

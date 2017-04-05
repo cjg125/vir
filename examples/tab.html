@@ -70,6 +70,9 @@
   <script>
     (function () {
       var App = Vir({
+        data: {
+          index: 0
+        },
         events: {
           'click->ol > li': 'handler'
         },
@@ -77,13 +80,10 @@
           index: function (result) {
             var old = result.old
             var index = result.value
-            this.$$('ol > li').eq(index).addClass('cur')
-            this.$$('ul > li').eq(index).show()
-            if (old === void 0) {
-              return
-            }
             this.$$('ol > li').eq(old).removeClass('cur')
             this.$$('ul > li').eq(old).hide()
+            this.$$('ol > li').eq(index).addClass('cur')
+            this.$$('ul > li').eq(index).show()
           }
         },
         methods: {
@@ -94,11 +94,13 @@
         }
       })
 
-
       new App({
         el: ".demo",
         init: function () {
-          this.set('index', 0)
+          this.set('index', 0, {
+            force: true
+          })
+          console.log(this)
         }
       })
     })()

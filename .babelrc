@@ -1,7 +1,10 @@
 {
   "env": {
     "test": {
-      "presets": ["latest"]
+      "presets": ["latest"],
+      "plugins": [
+        "transform-runtime"
+      ]
     }
   },
   "presets": [

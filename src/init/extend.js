@@ -1,10 +1,15 @@
+import {
+  create
+} from '../lib/objeat'
+import $ from 'jquery'
+
 export default function (defaultOptions = {}, options = {}) {
   return $.extend(true, {
     tagName: 'div',
-    data: {},
-    events: {},
-    methods: {},
-    watch: {},
+    data: create(null),
+    events: create(null),
+    methods: create(null),
+    watch: create(null),
     beforeInit() {},
     init() {},
     inited() {}

@@ -1,9 +1,9 @@
 import test from 'ava'
-import initVir from './helpers/initVir'
+import Vir from '../dist/index'
 
 test('订阅事件', async t => {
-  const Vir = await initVir()
-  const app = new(Vir())
+  const App = Vir()
+  const app = new App
   t.plan(3 * 2)
   app.on('*', () => {
     t.pass()

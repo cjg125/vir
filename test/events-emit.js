@@ -1,9 +1,9 @@
 import test from 'ava'
-import initVir from './helpers/initVir'
+import Vir from '../dist/index'
 
 test('发布事件', async t => {
-  const Vir = await initVir()
-  const app = new(Vir())
+  const App = Vir()
+  const app = new App
   t.plan(4)
   app.on('a', () => {
     t.pass()
@@ -17,8 +17,8 @@ test('发布事件', async t => {
 })
 
 test('发布事件->传递参数', async t => {
-  const Vir = await initVir()
-  const app = new(Vir())
+  const App = Vir()
+  const app = new App
   app.on('a', (event) => {
     t.is(event.message, 'hi~')
   })
@@ -28,8 +28,8 @@ test('发布事件->传递参数', async t => {
 })
 
 test('发布事件->自定义上下文', async t => {
-  const Vir = await initVir()
-  const app = new(Vir())
+  const App = Vir()
+  const app = new App
   let ctx = {
     x: 1
   }
