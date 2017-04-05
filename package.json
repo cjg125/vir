@@ -1,6 +1,6 @@
 {
   "name": "vir",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "main": "dist/index.js",
   "repository": "git@github.com:cjg125/vir.git",
   "author": "cjg <caojungang@sogou-inc.com>",
@@ -9,7 +9,7 @@
     "dev": "rollup -c -w",
     "test": "cross-env BABEL_ENV=test ava -v",
     "watch:test": "cross-env BABEL_ENV=test ava -w -v",
-    "rel": "npm test && rollup -c && rollup -c --environment NODE_ENV:production"
+    "rel": "rollup -c && rollup -c --environment NODE_ENV:production"
   },
   "devDependencies": {
     "ava": "^0.18.2",

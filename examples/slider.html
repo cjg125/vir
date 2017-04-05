@@ -141,6 +141,11 @@
             this.$$('ol > li').eq(old).removeClass('cur')
           }]
         },
+        validate: {
+          index: function (result) {
+            // console.log(result)
+          }
+        },
         methods: {
           index: function (index) {
             var len = this.len
@@ -185,7 +190,7 @@
           this.await = 3000
           this.duration = 600
           this.loop()
-          console.log(this)
+          // console.log(this)
         }
       })
     })()

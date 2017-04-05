@@ -2,6 +2,10 @@ import {
   isFunction
 } from '../lib/typeof'
 
+import {
+  forEach
+} from '../lib/array'
+
 export default function (events) {
 
   function bindEvent(...args) {
@@ -11,13 +15,13 @@ export default function (events) {
     } else {
       handler = handler.split(' ')
     }
-    for (let i = 0, len = handler.length; i < len; i++) {
-      let callback = handler[i]
+
+    forEach(handler, (callback) => {
       if (!isFunction(callback)) {
         callback = this[callback]
       }
       this.$el.on.apply(this.$el, args.concat((event) => callback.call(this, event)))
-    }
+    })
   }
 
   for (let type in events) {

@@ -1,7 +1,15 @@
 {
   "env": {
     "test": {
-      "presets": ["latest"],
+      "presets": [
+        [
+          "latest", {
+            "es2015": {
+              "loose": true
+            }
+          }
+        ]
+      ],
       "plugins": [
         "transform-runtime"
       ]
@@ -11,6 +19,7 @@
     [
       "latest", {
         "es2015": {
+          "loose": true,
           "modules": false
         }
       }

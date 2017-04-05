@@ -10,6 +10,7 @@ export default function (defaultOptions = {}, options = {}) {
     events: create(null),
     methods: create(null),
     watch: create(null),
+    validate: create(null),
     beforeInit() {},
     init() {},
     inited() {}

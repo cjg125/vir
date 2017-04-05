@@ -1,16 +1,31 @@
 import {
-  isObject
+  isObject,
+  isFunction
 } from './lib/typeof'
 
 export default function (Vir) {
-  Vir.prototype.set = function (name, value, options = {}) {
-    if (isObject(name)) {
-      for (let i in name) {
-        this.set(i, name[i], value)
+  Vir.prototype.set = function (type, value, options = {}) {
+    if (isObject(type)) {
+      for (let i in type) {
+        this.set(i, type[i], value)
       }
     } else {
-      let old = this.get(name)
-      this.data[name] = value
+
+      let old = this.get(type)
+
+      let args = {
+        old,
+        value,
+        type
+      }
+
+      let validate = this.validate[type]
+
+      if (isFunction(validate) && validate.call(this, args) !== void 0) {
+        return
+      }
+
+      this.data[type] = value
 
       if (!options.force && old === value) {
         return
@@ -20,11 +35,7 @@ export default function (Vir) {
         return
       }
 
-      this.emit(name, {
-        old: old,
-        value: value,
-        type: name
-      }, this)
+      this.emit(type, args, this)
     }
   }
 }

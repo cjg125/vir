@@ -18,6 +18,7 @@ export default function (Vir) {
       events,
       methods,
       watch,
+      validate,
       beforeInit,
       init,
       inited
@@ -26,6 +27,7 @@ export default function (Vir) {
     this._uid = ++uid
     this.$el = el ? $(el) : $('<' + tagName + '>')
     this.data = data
+    this.validate = validate
     this._events = create(null)
     this._cache = create(null)
 

@@ -1,5 +1,5 @@
 /*!
- * Vir.js v0.3.0
+ * Vir.js v0.4.0
  * (c) 2017 cjg
  * Released under the MIT License.
  */
@@ -27,6 +27,7 @@ var extend = function () {
     events: create(null),
     methods: create(null),
     watch: create(null),
+    validate: create(null),
     beforeInit: function beforeInit() {},
     init: function init() {},
     inited: function inited() {}
@@ -67,20 +68,42 @@ function isFunction(val) {
   return type(val) === '[object Function]';
 }
 
-function handler(watch) {
-  for (var name in watch) {
-    if (isFunction(watch[name])) {
-      this.on(name, watch[name]);
-    } else {
-      var watchs = watch[name];
-      var i = 0;
-      var len = watchs.length;
-      var options = {};
-      for (; i < len; i++) {
-        options[name] = watchs[i];
-        handler.call(this, options);
-      }
+function forEach(array, callback) {
+  for (var i = 0, len = array.length; i < len; i++) {
+    callback(array[i], i, array);
+  }
+}
+
+function indexOf(array, value) {
+  var i = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+
+  var len = array.length;
+  i = Math.max(i >= 0 ? i : len - Math.abs(i), 0);
+  for (; i < len; i++) {
+    if (array[i] === value) {
+      return i;
     }
+  }
+  return -1;
+}
+
+function handler(watch) {
+  var _this = this;
+
+  var _loop = function _loop(name) {
+    if (isFunction(watch[name])) {
+      _this.on(name, watch[name]);
+    } else {
+      forEach(watch[name], function (callback) {
+        var _handler$call;
+
+        handler.call(_this, (_handler$call = {}, _handler$call[name] = callback, _handler$call));
+      });
+    }
+  };
+
+  for (var name in watch) {
+    _loop(name);
   }
 }
 
@@ -100,19 +123,14 @@ var initBindEvents = function (events) {
       handler = handler.split(' ');
     }
 
-    var _loop = function _loop(i, len) {
-      var callback = handler[i];
+    forEach(handler, function (callback) {
       if (!isFunction(callback)) {
         callback = _this[callback];
       }
       _this.$el.on.apply(_this.$el, args.concat(function (event) {
         return callback.call(_this, event);
       }));
-    };
-
-    for (var i = 0, len = handler.length; i < len; i++) {
-      _loop(i, len);
-    }
+    });
   }
 
   for (var type in events) {
@@ -131,6 +149,7 @@ var init = function (Vir) {
         events = _extend.events,
         methods = _extend.methods,
         watch = _extend.watch,
+        validate = _extend.validate,
         beforeInit = _extend.beforeInit,
         init = _extend.init,
         inited = _extend.inited;
@@ -138,6 +157,7 @@ var init = function (Vir) {
     this._uid = ++uid;
     this.$el = el ? $(el) : $('<' + tagName + '>');
     this.data = data;
+    this.validate = validate;
     this._events = create(null);
     this._cache = create(null);
 
@@ -149,25 +169,6 @@ var init = function (Vir) {
     inited.call(this);
   };
 };
-
-function forEach(array, callback) {
-  for (var i = 0, len = array.length; i < len; i++) {
-    callback(array[i], i, array);
-  }
-}
-
-function indexOf(array, value) {
-  var i = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
-
-  var len = array.length;
-  i = Math.max(i >= 0 ? i : len - Math.abs(i), 0);
-  for (; i < len; i++) {
-    if (array[i] === value) {
-      return i;
-    }
-  }
-  return -1;
-}
 
 var initEvents = function (Vir) {
 
@@ -233,16 +234,30 @@ var initEvents = function (Vir) {
 };
 
 var initSetter = function (Vir) {
-  Vir.prototype.set = function (name, value) {
+  Vir.prototype.set = function (type, value) {
     var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
-    if (isObject(name)) {
-      for (var i in name) {
-        this.set(i, name[i], value);
+    if (isObject(type)) {
+      for (var i in type) {
+        this.set(i, type[i], value);
       }
     } else {
-      var old = this.get(name);
-      this.data[name] = value;
+
+      var old = this.get(type);
+
+      var args = {
+        old: old,
+        value: value,
+        type: type
+      };
+
+      var validate = this.validate[type];
+
+      if (isFunction(validate) && validate.call(this, args) !== void 0) {
+        return;
+      }
+
+      this.data[type] = value;
 
       if (!options.force && old === value) {
         return;
@@ -252,11 +267,7 @@ var initSetter = function (Vir) {
         return;
       }
 
-      this.emit(name, {
-        old: old,
-        value: value,
-        type: name
-      }, this);
+      this.emit(type, args, this);
     }
   };
 };
