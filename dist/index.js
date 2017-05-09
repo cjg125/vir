@@ -1,5 +1,5 @@
 /*!
- * Vir.js v0.5.0
+ * Vir.js v0.6.0
  * (c) 2017 cjg
  * Released under the MIT License.
  */
@@ -13,8 +13,10 @@ $ = 'default' in $ ? $['default'] : $;
 
 var create = Object.create || function (target) {
   var TEMP = function TEMP() {};
+  TEMP.prototype = target;
+  var temp = new TEMP();
   TEMP.prototype = null;
-  return new TEMP();
+  return temp;
 };
 
 var extend = function () {

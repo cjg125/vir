@@ -1,6 +1,6 @@
 import {
   create
-} from '../lib/objeat'
+} from '../lib/object'
 import $ from 'jquery'
 
 export default function (defaultOptions = {}, options = {}) {

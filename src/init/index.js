@@ -1,7 +1,7 @@
 import $ from 'jquery'
 import {
   create
-} from '../lib/objeat'
+} from '../lib/object'
 import extend from './extend'
 import initMixin from './mixin'
 import initWatch from './watch'

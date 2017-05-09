@@ -2,13 +2,9 @@
   "env": {
     "test": {
       "presets": [
-        [
-          "latest", {
-            "es2015": {
-              "loose": true
-            }
-          }
-        ]
+        ["env", {
+          "loose": true
+        }]
       ],
       "plugins": [
         "transform-runtime"
@@ -16,14 +12,10 @@
     }
   },
   "presets": [
-    [
-      "latest", {
-        "es2015": {
-          "loose": true,
-          "modules": false
-        }
-      }
-    ]
+    ["env", {
+      "loose": true,
+      "modules": false
+    }]
   ],
   "plugins": [
     "external-helpers",
