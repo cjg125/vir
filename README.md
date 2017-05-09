@@ -26,4 +26,9 @@
 
 [https://cjg.gitbooks.io/vir/](https://cjg.gitbooks.io/vir/)
 
+## TODO
+
+- [ ] 对 Object 的 watch 处理
+- [ ] 对 Array 的 watch 处理
+
 
