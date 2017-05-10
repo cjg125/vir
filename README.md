@@ -30,5 +30,7 @@
 
 - [ ] 对 Object 的 watch 处理
 - [ ] 对 Array 的 watch 处理
+- [ ] 实现插件接口
+
 
 
