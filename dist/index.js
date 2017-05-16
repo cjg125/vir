@@ -1,5 +1,5 @@
 /*!
- * Vir.js v0.6.0
+ * Vir.js v1.0.0
  * (c) 2017 cjg
  * Released under the MIT License.
  */
