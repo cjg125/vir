@@ -1,3 +1,11 @@
-global.document = require('jsdom').jsdom('<body></body>')
-global.window = document.defaultView
+const {
+  JSDOM
+} = require("jsdom")
+
+const {
+  window
+} = new JSDOM(`...`)
+
+global.window = window
+global.document = window.document
 global.navigator = window.navigator

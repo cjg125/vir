@@ -12,15 +12,15 @@
     "rel": "rollup -c && rollup -c --environment NODE_ENV:production"
   },
   "devDependencies": {
-    "ava": "^0.18.2",
+    "ava": "^0.19.1",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-object-assign": "^6.22.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.4.0",
     "babel-register": "^6.24.0",
-    "cross-env": "^3.2.4",
+    "cross-env": "^5.0.0",
     "jquery": "^3.2.1",
-    "jsdom": "^9.12.0",
+    "jsdom": "^10.1.0",
     "rollup": "^0.41.5",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-uglify": "^1.0.1",
