@@ -1,10 +1,15 @@
 import {
   create
 } from '../lib/object'
-import $ from 'jquery'
 
-export default function (defaultOptions = {}, options = {}) {
-  return $.extend(true, {
+import assign from '../lib/assign'
+
+export default function (options = {}) {
+
+  let mixins = options.mixins || []
+
+
+  return assign.apply(null, [true, {
     tagName: 'div',
     data: create(null),
     events: create(null),
@@ -14,5 +19,5 @@ export default function (defaultOptions = {}, options = {}) {
     beforeInit() {},
     init() {},
     inited() {}
-  }, defaultOptions, options)
+  }, options].concat(mixins))
 }

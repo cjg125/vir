@@ -9,7 +9,7 @@
     "dev": "rollup -c -w",
     "test": "cross-env BABEL_ENV=test ava -v",
     "watch:test": "cross-env BABEL_ENV=test ava -w -v",
-    "rel": "rollup -c && rollup -c --environment NODE_ENV:production"
+    "build": "rollup -c && rollup -c --environment NODE_ENV:production"
   },
   "devDependencies": {
     "ava": "^0.19.1",

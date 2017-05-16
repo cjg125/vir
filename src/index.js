@@ -1,23 +1,22 @@
 import init from './init/index'
-import initEvents from './events'
+import initEventEmitter from './eventEmiter'
 import initSetter from './setter'
 import initGetter from './getter'
 import initSelector from './selector'
 
-export default function (defaultOptions) {
-  function Vir(options) {
-    if (!(this instanceof Vir)) {
-      return new Vir(options)
-    }
 
-    this._init(defaultOptions, options)
+function Vir(options) {
+  if (!(this instanceof Vir)) {
+    return new Vir(options)
   }
 
-  init(Vir)
-  initEvents(Vir)
-  initSetter(Vir)
-  initGetter(Vir)
-  initSelector(Vir)
-
-  return Vir
+  this._init(options)
 }
+
+init(Vir)
+initEventEmitter(Vir)
+initSetter(Vir)
+initGetter(Vir)
+initSelector(Vir)
+
+export default Vir
