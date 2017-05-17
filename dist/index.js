@@ -81,9 +81,13 @@ var initMixins = function () {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
 
-  var mixins = options.mixins || [];
+  var mixins = options.mixins;
 
-  return assign.apply(null, [true, {
+  if (mixins) {
+    delete options.mixins;
+  }
+
+  var args = [true, {
     tagName: 'div',
     data: create(null),
     events: create(null),
@@ -93,7 +97,9 @@ var initMixins = function () {
     beforeInit: function beforeInit() {},
     init: function init() {},
     inited: function inited() {}
-  }, options].concat(mixins));
+  }, options].concat(mixins || []);
+
+  return assign.apply(null, args);
 };
 
 var _extends = Object.assign || function (target) {
