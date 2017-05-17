@@ -110,6 +110,7 @@
   <script>
     (function () {
       var App = new Vir({
+        el: '.slider',
         data: {
           index: 0
         },
@@ -180,17 +181,13 @@
           var w = this.w = this.$el.width()
           this.$$('ul > li').css('width', w)
           this.$$('ul').css('width', len * w)
-        }
-      })
-
-      new App({
-        el: '.slider',
+        },
         inited: function () {
           this.step = 1
           this.await = 3000
           this.duration = 600
+          console.log(this)
           this.loop()
-          // console.log(this)
         }
       })
     })()

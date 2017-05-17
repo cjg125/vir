@@ -1,5 +1,5 @@
 /*!
- * Vir.js v0.6.0
+ * Vir.js v1.0.0
  * (c) 2017 cjg
  * Released under the MIT License.
  */
@@ -19,11 +19,75 @@ var create = Object.create || function (target) {
   return temp;
 };
 
-var extend = function () {
-  var defaultOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+var toString = Object.prototype.toString;
 
-  return $.extend(true, {
+function type(val) {
+  return toString.call(val);
+}
+
+function isArray(val) {
+  return type(val) === '[object Array]';
+}
+
+function isObject(val) {
+  return type(val) === '[object Object]';
+}
+
+function isFunction(val) {
+  return type(val) === '[object Function]';
+}
+
+
+
+
+
+function isBoolean(val) {
+  return type(val) === '[object Boolean]';
+}
+
+function assign() {
+  var target = arguments.length <= 0 ? undefined : arguments[0];
+  var i = 1;
+  var deep = false;
+
+  if (isBoolean(target)) {
+    deep = target;
+    target = arguments.length <= 1 ? undefined : arguments[1];
+    i = 2;
+  }
+
+  for (var source; source = (_ref = i++, arguments.length <= _ref ? undefined : arguments[_ref]);) {
+    var _ref;
+
+    if (isObject(source) || isArray(source)) {
+      for (var key in source) {
+        var _target = target[key];
+        var _source = source[key];
+        if (deep && isObject(_target) && isObject(_source)) {
+          target[key] = assign(deep, {}, _target, _source);
+        } else if (deep && isArray(_target) && isArray(_source)) {
+          target[key] = assign(deep, [], _target, _source);
+        } else {
+          target[key] = _source;
+        }
+      }
+    }
+  }
+
+  return target;
+}
+
+var initMixins = function () {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+
+  var mixins = options.mixins;
+
+  if (mixins) {
+    delete options.mixins;
+  }
+
+  var args = [true, {
     tagName: 'div',
     data: create(null),
     events: create(null),
@@ -33,7 +97,9 @@ var extend = function () {
     beforeInit: function beforeInit() {},
     init: function init() {},
     inited: function inited() {}
-  }, defaultOptions, options);
+  }, options].concat(mixins || []);
+
+  return assign.apply(null, args);
 };
 
 var _extends = Object.assign || function (target) {
@@ -50,25 +116,9 @@ var _extends = Object.assign || function (target) {
   return target;
 };
 
-var initMixin = function (methods) {
+var initMethods = function (methods) {
   _extends(this, methods);
 };
-
-var toString = Object.prototype.toString;
-
-function type(val) {
-  return toString.call(val);
-}
-
-
-
-function isObject(val) {
-  return type(val) === '[object Object]';
-}
-
-function isFunction(val) {
-  return type(val) === '[object Function]';
-}
 
 function forEach(array, callback) {
   for (var i = 0, len = array.length; i < len; i++) {
@@ -143,28 +193,28 @@ var initBindEvents = function (events) {
 var uid = 0;
 
 var init = function (Vir) {
-  Vir.prototype._init = function (defaultOptions, options) {
-    var _extend = extend(defaultOptions, options),
-        el = _extend.el,
-        tagName = _extend.tagName,
-        data = _extend.data,
-        events = _extend.events,
-        methods = _extend.methods,
-        watch = _extend.watch,
-        validate = _extend.validate,
-        beforeInit = _extend.beforeInit,
-        init = _extend.init,
-        inited = _extend.inited;
+  Vir.prototype._init = function (options) {
+    var _initMixins = initMixins(options),
+        el = _initMixins.el,
+        tagName = _initMixins.tagName,
+        data = _initMixins.data,
+        events = _initMixins.events,
+        methods = _initMixins.methods,
+        watch = _initMixins.watch,
+        validate = _initMixins.validate,
+        beforeInit = _initMixins.beforeInit,
+        init = _initMixins.init,
+        inited = _initMixins.inited;
 
     this._uid = ++uid;
     this.$el = el ? $(el) : $('<' + tagName + '>');
-    this.data = data;
+    this.data = data; // state
     this.validate = validate;
-    this._events = create(null);
-    this._cache = create(null);
+    this._events = create(null); // eventEmiter
+    this._cache = create(null); // selector cache (this.$$)
 
     beforeInit.call(this);
-    initMixin.call(this, methods);
+    initMethods.call(this, methods);
     handler.call(this, watch);
     initBindEvents.call(this, events);
     init.call(this);
@@ -172,7 +222,7 @@ var init = function (Vir) {
   };
 };
 
-var initEvents = function (Vir) {
+var initEventEmitter = function (Vir) {
 
   Vir.prototype.getEventListeners = function (type) {
     if (type === void 0) {
@@ -301,25 +351,21 @@ var initSelector = function (Vir) {
   };
 };
 
-var index = function (defaultOptions) {
-  function Vir(options) {
-    if (!(this instanceof Vir)) {
-      return new Vir(options);
-    }
-
-    this._init(defaultOptions, options);
+function Vir(options) {
+  if (!(this instanceof Vir)) {
+    return new Vir(options);
   }
 
-  init(Vir);
-  initEvents(Vir);
-  initSetter(Vir);
-  initGetter(Vir);
-  initSelector(Vir);
+  this._init(options);
+}
 
-  return Vir;
-};
+init(Vir);
+initEventEmitter(Vir);
+initSetter(Vir);
+initGetter(Vir);
+initSelector(Vir);
 
-return index;
+return Vir;
 
 })));
 //# sourceMappingURL=index.js.map

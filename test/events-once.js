@@ -2,8 +2,7 @@ import test from 'ava'
 import Vir from '../dist/index'
 
 test('订阅事件 once', async t => {
-  const App = Vir()
-  const app = new App
+  const app = new Vir
   t.plan(4)
   app.once('a', () => {
     t.pass()
@@ -24,8 +23,7 @@ test('订阅事件 once', async t => {
 })
 
 test('订阅事件 once', async t => {
-  const App = Vir()
-  const app = new App
+  const app = new Vir
   app.on('a', () => {
     t.pass()
   })
